@@ -22,7 +22,7 @@
 #import "EBBindData.h"
 #import "EBUtility+WX.h"
 
-WX_PlUGIN_EXPORT_MODULE(bindingx, EBWXModule)
+// WX_PlUGIN_EXPORT_MODULE(bindingx, EBWXModule)
 
 @interface EBWXModule ()
 
@@ -43,6 +43,12 @@ WX_EXPORT_METHOD(@selector(unbind:))
 WX_EXPORT_METHOD(@selector(unbindAll))
 WX_EXPORT_METHOD_SYNC(@selector(supportFeatures))
 WX_EXPORT_METHOD_SYNC(@selector(getComputedStyle:))
+
++ (void)load
+{
+    [WXSDKEngine registerModule:@"bindingx" withClass:EBWXModule.class];
+    [WXSDKEngine registerModule:@"binding" withClass:EBWXModule.class];
+}
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -312,7 +318,7 @@ WX_EXPORT_METHOD_SYNC(@selector(getComputedStyle:))
 
 @end
 
-WX_PlUGIN_EXPORT_MODULE(binding, EBWXBindingModule)
+// WX_PlUGIN_EXPORT_MODULE(binding, EBWXBindingModule)
 
 @interface EBWXBindingModule : EBWXModule
 

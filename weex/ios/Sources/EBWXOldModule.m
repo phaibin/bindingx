@@ -22,7 +22,7 @@
 #import "EBBindData.h"
 #import "EBUtility+WX.h"
 
-WX_PlUGIN_EXPORT_MODULE(expressionBinding, EBWXOldModule)
+// WX_PlUGIN_EXPORT_MODULE(expressionBinding, EBWXOldModule)
 
 @interface EBWXOldModule ()
 
@@ -43,6 +43,11 @@ WX_EXPORT_METHOD(@selector(disableBinding:eventType:))
 WX_EXPORT_METHOD(@selector(disableAll))
 WX_EXPORT_METHOD_SYNC(@selector(supportFeatures))
 WX_EXPORT_METHOD_SYNC(@selector(getComputedStyle:))
+
++ (void)load
+{
+    [WXSDKEngine registerModule:@"expressionBinding" withClass:EBWXOldModule.class];
+}
 
 - (instancetype)init {
     if (self = [super init]) {
