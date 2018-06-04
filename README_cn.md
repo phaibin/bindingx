@@ -1,6 +1,6 @@
 
 
-![BindingX_250.png | center | 259x249](https://img.alicdn.com/tfs/TB1ZG58bb1YBuNjSszeXXablFXa-400-400.png "")
+![BindingX_250.png | center | 259x249](https://img.alicdn.com/tfs/TB1ZG58bb1YBuNjSszeXXablFXa-400-400.png_250x250.jpg "")
 
 ### BindingX
 
@@ -30,6 +30,24 @@
     <img style="margin-right:10px" src="https://gw.alicdn.com/tfs/TB1LCmUbkyWBuNjy0FpXXassXXa-320-563.gif" width = "200" height = "350"/>
     <img src="https://gw.alicdn.com/tfs/TB1FRGZbeuSBuNjy1XcXXcYjFXa-320-563.gif" width = "200" height = "350"/>
 </div>
+
+
+# 简单示例
+  1. pan gesture: [rax](https://jsplayground.taobao.org/raxplayground/34ceb3e5-8927-4e0c-a282-2dd37c9d7b74)  [vue](https://jsplayground.taobao.org/vueplayground/1518d8ac-4403-414f-ba83-616eb8b77dc6)  [rn](https://github.com/alibaba/bindingx/blob/master/react-native/example/src/AnimatedBall.js)
+  2. timing: [rax](https://jsplayground.taobao.org/raxplayground/31211efb-d643-4cd0-8e9e-46b0c29ddd50)  [vue](https://jsplayground.taobao.org/vueplayground/6a016074-225c-461e-bfa7-b73b8336ea3d)  [rn](https://github.com/alibaba/bindingx/blob/master/react-native/example/src/TimingDemo.js)
+  3. scroll: [rax](https://jsplayground.taobao.org/raxplayground/8e3b0234-f218-41e2-b146-db76a00e4096)  [vue](https://jsplayground.taobao.org/vueplayground/0fe39539-f08c-4be0-a589-499be32f6351)  [rn](https://github.com/alibaba/bindingx/blob/master/react-native/example/src/ScrollViewDemo.js)
+  4. orientation: [rax](https://jsplayground.taobao.org/raxplayground/1d3ed4e1-506b-4308-bffa-ecf241a0cc70)  [vue](https://jsplayground.taobao.org/vueplayground/18a9115c-c85b-4a12-a1b2-2b0c401a6eb6)  [rn](https://github.com/alibaba/bindingx/blob/master/react-native/example/src/OrientationDemo.js)
+
+# 实际项目示例
+  1. Draggable ball: [rax](https://jsplayground.taobao.org/raxplayground/3ec5c8ef-42ff-47fb-9791-4bd7c257b4a7)  [vue](https://jsplayground.taobao.org/vueplayground/de9c7e84-2dc0-4873-8bb0-ce899e64f6ab)
+  2. Swipeable card: [rax](https://jsplayground.taobao.org/raxplayground/7ac0f12b-72e7-4aa5-b398-693ba7b34cd6)  [vue](https://jsplayground.taobao.org/vueplayground/9e4899f6-0fe1-4ffa-86ec-b9c28d22bae9)
+  3. Expandable menu: [rax](https://jsplayground.taobao.org/raxplayground/3f93ffd1-3028-4a9e-9e94-0188973bc44b)  [vue](https://jsplayground.taobao.org/vueplayground/3a388c50-18f8-45d3-b1cf-3f5f0c226c19)
+  4. Slide layout: [rax](https://jsplayground.taobao.org/raxplayground/34e0eae9-ca2d-481f-94b5-239732651eeb)  [vue](https://jsplayground.taobao.org/vueplayground/925802dc-c7c9-4309-b1e1-f83458bb39c4)
+  5. Circle menu: [rax](https://jsplayground.taobao.org/raxplayground/0b2fa94c-b107-422f-8c2c-60481af89d31)  [vue](https://jsplayground.taobao.org/vueplayground/42ffd6b2-9ff6-4161-8224-34779b3af7e6)
+  6. Navigation with Tab: [rax](https://jsplayground.taobao.org/raxplayground/b8583160-f63f-4ab6-9f98-af7a3da283f8)  [vue](https://jsplayground.taobao.org/vueplayground/2f9e0733-b853-4d97-b350-2630c1a50c83)
+  7. Ripple effect: [rax](https://jsplayground.taobao.org/raxplayground/c4a295f5-bec2-485e-8e05-de80c7274191)  [vue](https://jsplayground.taobao.org/vueplayground/2741ac64-3956-4dc9-ad61-d59b5768d97f)
+
+注意：Weex支持两种前端写法（rax和vue），链接是直接跳转到Playground。 React-Native由于目前Playground还不支持，所以直接跳转到源码。
 
 ### 特性
 
@@ -98,12 +116,30 @@
 自动注册module，无需手动注册。
 
 ### React Native接入
-#### 前置条件
+*前置条件*: 确保你已经集成了react native。
 
-确保你已经集成了react native。
+1. 安装依赖 `npm install react-native-bindingx --save`
+2. 链接: `react-native link react-native-bindingx`
 
-注: 目前我们还没有把插件代码上传到npm，所以您现在需要通过源码依赖我们的RN插件。
-我们近期会将插件上传到npm，届时您可以通过npm安装插件。
+#### Android
+
+在你项目的`build.gradle`中增加`bindingx-core`依赖:
+
+  ```
+  implementation 'com.alibaba.android:bindingx-core:{latest_version}'
+  ```
+
+1. `bindingx`默认使用gradle 3.x编译，如果你的项目还是运行在gradle 2.x上，需要升级到3.x；
+2. gradle 3.x使用`implementation`关键字替代了`compile`关键字，需要修改；
+3. 增加google源:
+
+  ```
+  repositories {
+    google()
+    ...
+  }
+  ```
+
 
 ### 文档与教程
 

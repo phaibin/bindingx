@@ -18,7 +18,6 @@
 #import "EBExpressionScope.h"
 #import "EBExpression.h"
 #import "EBExpressionExecutor.h"
-#import "EBExpressionProperty.h"
 #import "EBUtility.h"
 
 @interface EBExpressionGesture () <UIGestureRecognizerDelegate>
@@ -46,14 +45,16 @@
     _gesture.delegate = _tmpDelegate;
 }
 
-- (void)updateTargetExpression:(NSMapTable<id, NSDictionary *> *)expressionMap
-                       options:(NSDictionary *)options
-                exitExpression:(NSDictionary *)exitExpression
-                      callback:(EBKeepAliveCallback)callback {
-    [super updateTargetExpression:expressionMap
-                          options:options
-                   exitExpression:exitExpression
-                         callback:callback];
+- (void)updateTargetMap:(NSMapTable<NSString *,id> *)targetMap
+         expressionDict:(NSDictionary *)expressionDict
+                options:(NSDictionary *)options
+         exitExpression:(NSDictionary *)exitExpression
+               callback:(EBKeepAliveCallback)callback {
+    [super updateTargetMap:targetMap
+            expressionDict:expressionDict
+                   options:options
+            exitExpression:exitExpression
+                  callback:callback];
     
     [self initGesture];
 }
@@ -62,12 +63,14 @@
 - (void)removeExpressionBinding {
     [super removeExpressionBinding];
     
-    if (self.tmpDelegate) {
-        self.gesture.delegate = self.tmpDelegate;
-        [self.gesture removeTarget:self action:nil];
-        self.tmpDelegate = nil;
-    }
-    self.gesture = nil;
+    [EBUtility performBlockOnMainThread:^{
+        if (self.tmpDelegate) {
+            self.gesture.delegate = self.tmpDelegate;
+            [self.gesture removeTarget:self action:nil];
+            self.tmpDelegate = nil;
+        }
+        self.gesture = nil;
+    }];
 }
 
 #pragma mark - private methods
@@ -121,7 +124,8 @@
     
     if (!keepAlive) {
         // free resouces
-        self.expressionMap = nil;
+        self.targetMap = nil;
+        self.expressionDict = nil;
         self.callback = nil;
     }
 }

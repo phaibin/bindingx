@@ -24,8 +24,9 @@ module.exports = {
     contentBase: "./demo",
     historyApiFallback: true,
     inline: true,
+    public: '0.0.0.0',
     publicPath: '/dist/',
-    port: 8081
+    port: 8088
   },
   module: {
     loaders: [

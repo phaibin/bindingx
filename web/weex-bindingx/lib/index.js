@@ -1,27 +1,27 @@
 
-  ;(function(fn) {
-    if (typeof exports === "object" && typeof module !== "undefined") {
+;(function(fn) {
+  if (typeof exports === "object" && typeof module !== "undefined") {
+    module.exports = fn();
+  } else if (typeof define === "function") {
+    define("index", function(require, exports, module){
       module.exports = fn();
-    } else if (typeof define === "function") {
-      define("index", function(require, exports, module){
-        module.exports = fn();
-      });
+    });
+  } else {
+    var root;
+    if (typeof window !== "undefined") {
+      root = window;
+    } else if (typeof self !== "undefined") {
+      root = self;
+    } else if (typeof global !== "undefined") {
+      root = global;
     } else {
-      var root;
-      if (typeof window !== "undefined") {
-        root = window;
-      } else if (typeof self !== "undefined") {
-        root = self;
-      } else if (typeof global !== "undefined") {
-        root = global;
-      } else {
-        // NOTICE: In JavaScript strict mode, this is null
-        root = this;
-      }
-      root["index"] = fn();
+      // NOTICE: In JavaScript strict mode, this is null
+      root = this;
     }
-  })(function(){
-    return /******/ (function(modules) { // webpackBootstrap
+    root["index"] = fn();
+  }
+})(function(){
+  return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -134,7 +134,7 @@ var isSupportBinding = true;
 var WeexBinding = void 0;
 var WebBinding = {};
 if (_universalEnv.isWeb) {
-  WebBinding = __webpack_require__(5);
+  WebBinding = __webpack_require__(4);
 } else {
   try {
     WeexBinding = requireModule('bindingx');
@@ -331,7 +331,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 // https://www.w3.org/TR/html5/webappapis.html#dom-navigator-appcodename
 var isWeb = exports.isWeb = (typeof navigator === 'undefined' ? 'undefined' : _typeof(navigator)) === 'object' && (navigator.appCodeName === 'Mozilla' || navigator.product === 'Gecko');
 var isNode = exports.isNode = typeof process !== 'undefined' && !!(process.versions && process.versions.node);
-var isWeex = exports.isWeex = typeof callNative === 'function';
+var isWeex = exports.isWeex = typeof callNative === 'function' || (typeof WXEnvironment === 'undefined' ? 'undefined' : _typeof(WXEnvironment)) === 'object' && WXEnvironment.platform !== 'Web';
 var isReactNative = exports.isReactNative = typeof __fbBatchedBridgeConfig !== 'undefined';
 exports['default'] = module.exports;
 exports.default = module.exports;
@@ -531,17 +531,105 @@ process.umask = function() { return 0; };
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-module.exports = __webpack_require__(4);
-
-/***/ }),
-/* 4 */
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(true)
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(typeof self !== 'undefined' ? self : this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/**
+ Copyright 2018 Alibaba Group
 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var lex = {
   InputElementDiv: '<WhiteSpace>|<LineTerminator>|<ReservedWord>|<Identifier>|<NumericLiteral>|<Punctuator>|<StringLiteral>',
@@ -564,39 +652,33 @@ function XRegExp(xregexps, rootname, flag) {
   var expnames = [rootname];
 
   function buildRegExp(source) {
-    var regexp = new RegExp;
-    regexp.compile(source.replace(/<([^>]+)>/g,
-      function (all, expname) {
-        if (!xregexps[expname])
-          return '';
-        expnames.push(expname);
-        if (xregexps[expname] instanceof RegExp)
-          return '(' + xregexps[expname].source + ')';
-        return '(' + buildRegExp(xregexps[expname]).source + ')';
-      }), flag);
+    var regexp = new RegExp();
+    regexp.compile(source.replace(/<([^>]+)>/g, function (all, expname) {
+      if (!xregexps[expname]) return '';
+      expnames.push(expname);
+      if (xregexps[expname] instanceof RegExp) return '(' + xregexps[expname].source + ')';
+      return '(' + buildRegExp(xregexps[expname]).source + ')';
+    }), flag);
     return regexp;
   }
 
   var regexp = buildRegExp(xregexps[rootname]);
   this.exec = function (string) {
     var matches = regexp.exec(string);
-    if (matches == null)
-      return null;
+    if (matches == null) return null;
     var result = new String(matches[0]);
-    for (var i = 0; i < expnames.length; i++)
-      if (matches[i])
-        result[expnames[i]] = matches[i];
-    return result;
+    for (var i = 0; i < expnames.length; i++) {
+      if (matches[i]) result[expnames[i]] = matches[i];
+    }return result;
   };
-  Object.defineProperty(this, 'lastIndex',
-    {
-      'get': function () {
-        return regexp.lastIndex;
-      },
-      'set': function (v) {
-        regexp.lastIndex = v;
-      }
-    });
+  Object.defineProperty(this, 'lastIndex', {
+    'get': function get() {
+      return regexp.lastIndex;
+    },
+    'set': function set(v) {
+      regexp.lastIndex = v;
+    }
+  });
 }
 
 function LexicalParser() {
@@ -604,10 +686,10 @@ function LexicalParser() {
   var inputElementRegExp = new XRegExp(lex, 'InputElementRegExp', 'g');
   var source;
   Object.defineProperty(this, 'source', {
-    'get': function () {
+    'get': function get() {
       return source;
     },
-    'set': function (v) {
+    'set': function set(v) {
       source = v;
       inputElementDiv.lastIndex = 0;
       inputElementRegExp.lastIndex = 0;
@@ -620,10 +702,7 @@ function LexicalParser() {
   this.getNextToken = function (useDiv) {
     var lastIndex = inputElementDiv.lastIndex;
     var inputElement;
-    if (useDiv)
-      inputElement = inputElementDiv;
-    else
-      inputElement = inputElementRegExp;
+    if (useDiv) inputElement = inputElementDiv;else inputElement = inputElementRegExp;
     var token = inputElement.exec(source);
     if (token && inputElement.lastIndex - lastIndex > token.length) {
       throw new SyntaxError('Unexpected token ILLEGAL');
@@ -660,19 +739,17 @@ var rules = {
 
 };
 
-function Symbol(symbolName, token) {
+function _Symbol(symbolName, token) {
   this.name = symbolName;
   this.token = token;
   this.childNodes = [];
   this.toString = function (indent) {
-    if (!indent)
-      indent = '';
-    if (this.childNodes.length == 1)
-      return this.childNodes[0].toString(indent);
+    if (!indent) indent = '';
+    if (this.childNodes.length == 1) return this.childNodes[0].toString(indent);
     var str = indent + this.name + (this.token != undefined && this.name != this.token ? ':' + this.token : '') + '\n';
-    for (var i = 0; i < this.childNodes.length; i++)
+    for (var i = 0; i < this.childNodes.length; i++) {
       str += this.childNodes[i].toString(indent + '    ');
-    return str;
+    }return str;
   };
 }
 
@@ -690,32 +767,25 @@ function SyntacticalParser() {
     var queue = Object.getOwnPropertyNames(node);
     while (queue.length) {
       var symbolName = queue.shift();
-      if (!rules[symbolName])
-        continue;
+      if (!rules[symbolName]) continue;
       rules[symbolName].forEach(function (rule) {
-        if (!node[rule[0]])
-          queue.push(rule[0]);
+        if (!node[rule[0]]) queue.push(rule[0]);
         var rulenode = node;
         var lastnode = null;
         rule.forEach(function (symbol) {
-          if (!rulenode[symbol])
-            rulenode[symbol] = {};
+          if (!rulenode[symbol]) rulenode[symbol] = {};
           lastnode = rulenode;
           rulenode = rulenode[symbol];
         });
-        if (node[symbolName].$div)
-          rulenode.$div = true;
+        if (node[symbolName].$div) rulenode.$div = true;
         rulenode.$reduce = symbolName;
         rulenode.$count = rule.length;
       });
     }
 
     for (var p in node) {
-      if (typeof node[p] != 'object' || p.charAt(0) == '$' || node[p].$closure)
-        continue;
-      if (hash[JSON.stringify(node[p])])
-        node[p] = hash[JSON.stringify(node[p])];
-      else {
+      if (_typeof(node[p]) != 'object' || p.charAt(0) == '$' || node[p].$closure) continue;
+      if (hash[JSON.stringify(node[p])]) node[p] = hash[JSON.stringify(node[p])];else {
         closureNode(node[p]);
       }
     }
@@ -729,16 +799,15 @@ function SyntacticalParser() {
   this.insertSymbol = function insertSymbol(symbol, haveLineTerminator) {
     while (!current[symbol.name] && current.$reduce) {
       var count = current.$count;
-      var newsymbol = new Symbol(current.$reduce);
-      while (count--)
+      var newsymbol = new _Symbol(current.$reduce);
+      while (count--) {
         newsymbol.childNodes.push(symbolStack.pop()), statusStack.pop();
-      current = statusStack[statusStack.length - 1];
+      }current = statusStack[statusStack.length - 1];
       this.insertSymbol(newsymbol);
     }
     current = current[symbol.name];
     symbolStack.push(symbol), statusStack.push(current);
-    if (!current)
-      throw new Error();
+    if (!current) throw new Error();
     return current.$div;
   };
   this.reset = function () {
@@ -747,22 +816,21 @@ function SyntacticalParser() {
     statusStack = [root];
   };
   Object.defineProperty(this, 'grammarTree', {
-    'get': function () {
+    'get': function get() {
       try {
         while (current.$reduce) {
           var count = current.$count;
-          var newsymbol = new Symbol(current.$reduce);
-          while (count--)
+          var newsymbol = new _Symbol(current.$reduce);
+          while (count--) {
             newsymbol.childNodes.push(symbolStack.pop()), statusStack.pop();
-          current = statusStack[statusStack.length - 1];
+          }current = statusStack[statusStack.length - 1];
           this.insertSymbol(newsymbol);
         }
         if (symbolStack.length > 0 && current[';']) {
-          this.insertSymbol(new Symbol(';', ';'));
+          this.insertSymbol(new _Symbol(';', ';'));
           return this.grammarTree;
         }
-        if (symbolStack.length != 1 || symbolStack[0].name != 'Program')
-          throw new Error();
+        if (symbolStack.length != 1 || symbolStack[0].name != 'Program') throw new Error();
       } catch (e) {
         throw new SyntaxError('Unexpected end of input');
       }
@@ -784,26 +852,24 @@ function Parser() {
     this.syntacticalParser.reset();
   };
   this.parse = function (source, onInputElement) {
+    var _this = this;
+
     var token;
     var haveLineTerminator = false;
     this.lexicalParser.source = source;
     var useDiv = false;
     while (token = this.lexicalParser.getNextToken(useDiv)) {
-      if (onInputElement)
-        onInputElement(token);
+      if (onInputElement) onInputElement(token);
       try {
-        if (Object.getOwnPropertyNames(token).some(
-            (e) => {
-              if (terminalSymbolIndex.hasOwnProperty(e)) {
-                useDiv = this.syntacticalParser.insertSymbol(new Symbol(e, token), haveLineTerminator);
-                haveLineTerminator = false;
-                return true;
-              } else
-                return false;
-            }))
-          continue;
+        if (Object.getOwnPropertyNames(token).some(function (e) {
+          if (terminalSymbolIndex.hasOwnProperty(e)) {
+            useDiv = _this.syntacticalParser.insertSymbol(new _Symbol(e, token), haveLineTerminator);
+            haveLineTerminator = false;
+            return true;
+          } else return false;
+        })) continue;
         if ((token.Keyword || token.Punctuator || token.DivPunctuator) && terminalSymbolIndex.hasOwnProperty(token.toString())) {
-          useDiv = this.syntacticalParser.insertSymbol(new Symbol(token.toString(), token), haveLineTerminator);
+          useDiv = this.syntacticalParser.insertSymbol(new _Symbol(token.toString(), token), haveLineTerminator);
         }
       } catch (e) {
         throw new SyntaxError('Unexpected token ' + token);
@@ -817,7 +883,7 @@ var parser = new Parser();
 
 function JavaScriptExpression(text) {
   parser.reset();
-  this.tree = (parser.parse(text));
+  this.tree = parser.parse(text);
   this.paths = [];
   var context = Object.create(null);
   var me = this;
@@ -832,22 +898,20 @@ function JavaScriptExpression(text) {
   this.setter = function (path) {
     var curr = context;
     for (var i = 0; i < path.length - 1; i++) {
-      if (!curr[path[i]])
-        curr[path[i]] = Object.create(null);
+      if (!curr[path[i]]) curr[path[i]] = Object.create(null);
       curr = curr[path[i]];
     }
     return {
-      isCompleted: function () {
-        for (var p in pathIndex)
-          if (!pathIndex[p])
-            return false;
-        return true;
+      isCompleted: function isCompleted() {
+        for (var p in pathIndex) {
+          if (!pathIndex[p]) return false;
+        }return true;
       },
-      set: function (value) {
+      set: function set(value) {
         if (!pathIndex[path.join('.')]) {
           pathIndex[path.join('.')] = true;
         }
-        curr[path[i]] = (value);
+        curr[path[i]] = value;
         if (this.isCompleted()) {
           return me.exec();
         } else {
@@ -862,8 +926,7 @@ function JavaScriptExpression(text) {
       return function () {
         return eval(text);
       }.call(context);
-    } catch (e) {
-    }
+    } catch (e) {}
   };
 
   function checkSimple(symbol) {
@@ -889,24 +952,23 @@ function JavaScriptExpression(text) {
     } else if (symbol.name === 'MemberExpression' && symbol.childNodes.length === 1) {
       var path = getPath(symbol);
     } else {
-      for (var i = 0; i < symbol.childNodes.length; i++)
+      for (var i = 0; i < symbol.childNodes.length; i++) {
         walk(symbol.childNodes[i]);
+      }
     }
-
   }
-
 
   function getPath(symbol) {
     // [["PrimaryExpression"], ["MemberExpression", "[", "Expression", "]"], ["MemberExpression", ".", "IdentifierName"], ["new", "MemberExpression", "Arguments"]],
 
-    if (symbol.childNodes[0].name === 'IdentifierName') { // MemberExpression : MemberExpression "." IdentifierName
+    if (symbol.childNodes[0].name === 'IdentifierName') {
+      // MemberExpression : MemberExpression "." IdentifierName
       var path = getPath(symbol.childNodes[2]);
-      if (path)
-        path = path.concat(symbol.childNodes[0].childNodes[0].token.toString());
+      if (path) path = path.concat(symbol.childNodes[0].childNodes[0].token.toString());
       createPath(path);
       return path;
-
-    } else if (symbol.childNodes[0].name === 'PrimaryExpression') { // MemberExpression : PrimaryExpression
+    } else if (symbol.childNodes[0].name === 'PrimaryExpression') {
+      // MemberExpression : PrimaryExpression
       if (symbol.childNodes[0].childNodes[0].name === 'Identifier') {
         var path = [symbol.childNodes[0].childNodes[0].token.toString()];
         createPath(path);
@@ -914,27 +976,27 @@ function JavaScriptExpression(text) {
       } else {
         return null;
       }
-    } else if (symbol.childNodes[0].name === ']') { // MemberExpression : MemberExpression "[" Expression "]"
+    } else if (symbol.childNodes[0].name === ']') {
+      // MemberExpression : MemberExpression "[" Expression "]"
       getPath(symbol.childNodes[3]);
       walk(symbol.childNodes[1]);
       return null;
-
-    } else if (symbol.childNodes[0].name === 'Arguments') { // MemberExpression : "new" MemberExpression Arguments
+    } else if (symbol.childNodes[0].name === 'Arguments') {
+      // MemberExpression : "new" MemberExpression Arguments
       walk(symbol.childNodes[0]);
       walk(symbol.childNodes[1]);
       return null;
     } else {
-      for (var i = 0; i < symbol.childNodes.length; i++)
+      for (var i = 0; i < symbol.childNodes.length; i++) {
         walk(symbol.childNodes[i]);
+      }
     }
   }
-
 
   function createPath(path) {
     var curr = context;
     for (var i = 0; i < path.length - 1; i++) {
-      if (!curr[path[i]])
-        curr[path[i]] = Object.create(null);
+      if (!curr[path[i]]) curr[path[i]] = Object.create(null);
       curr = curr[path[i]];
     }
     me.paths.push(path);
@@ -944,8 +1006,9 @@ function JavaScriptExpression(text) {
 
 function visit(tree) {
   var childNodes = tree.childNodes.slice().reverse();
-  var children = childNodes.filter(e =>
-    !e.token || !e.token.Punctuator);
+  var children = childNodes.filter(function (e) {
+    return !e.token || !e.token.Punctuator;
+  });
   if (tree.name === 'UnaryExpression') {
     // negative number support
     if (childNodes.length === 2 && childNodes[0].name === '-' && children.length === 1) {
@@ -970,24 +1033,29 @@ function visit(tree) {
     }
     return {
       type: 'Arguments',
-      children: argumentList.map(e => visit(e))
+      children: argumentList.map(function (e) {
+        return visit(e);
+      })
     };
   }
-
 
   if (children && children.length === 1) {
     var res = visit(children[0]);
     return res;
   }
 
-  if (tree.token && ['NullLiteral', 'BooleanLiteral', 'NumericLiteral', 'StringLiteral', 'Identifier'].some(e => tree.token[e])) {
-    var type = Object.keys(tree.token).filter(e => e.match(/Literal/) || e.match(/Identifier/))[0];
+  if (tree.token && ['NullLiteral', 'BooleanLiteral', 'NumericLiteral', 'StringLiteral', 'Identifier'].some(function (e) {
+    return tree.token[e];
+  })) {
+    var type = Object.keys(tree.token).filter(function (e) {
+      return e.match(/Literal/) || e.match(/Identifier/);
+    })[0];
     var value = {
       'NullLiteral': null,
       'BooleanLiteral': Boolean(tree.token),
       'NumericLiteral': Number(tree.token),
       'StringLiteral': tree.token,
-      'Identifier': tree.token,
+      'Identifier': tree.token
     }[type];
 
     return {
@@ -996,20 +1064,25 @@ function visit(tree) {
     };
   }
 
-  if (tree.name === 'CallExpression')
-    return {
-      type: 'CallExpression',
-      children: [visit(childNodes[0]), visit(childNodes[1])]
-    };
+  if (tree.name === 'CallExpression') return {
+    type: 'CallExpression',
+    children: [visit(childNodes[0]), visit(childNodes[1])]
+  };
 
   return {
-    type: childNodes.filter(e => e.token && e.token.Punctuator)[0].name,
-    children: childNodes.filter(e => !e.token || !e.token.Punctuator).map(e => visit(e))
+    type: childNodes.filter(function (e) {
+      return e.token && e.token.Punctuator;
+    })[0].name,
+    children: childNodes.filter(function (e) {
+      return !e.token || !e.token.Punctuator;
+    }).map(function (e) {
+      return visit(e);
+    })
   };
 }
 
 function parse(originExp) {
-  let exp = new JavaScriptExpression(originExp);
+  var exp = new JavaScriptExpression(originExp);
   return JSON.stringify(visit(exp.tree), null);
 }
 
@@ -1017,8 +1090,12 @@ module.exports = {
   parse: parse
 };
 
+/***/ })
+/******/ ]);
+});
+
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -2735,7 +2812,7 @@ var Binding = function () {
         var element = prop.element;
 
         if (!_simpleLodash2.default.find(elTransforms, function (o) {
-          return o.element === element;
+          return o.element === element && element instanceof HTMLElement;
         })) {
           elTransforms.push({
             element: element,
@@ -2765,69 +2842,124 @@ var Binding = function () {
   }, {
     key: 'setProperty',
     value: function setProperty(el, property, val) {
-      var elTransform = _simpleLodash2.default.find(this.elTransforms, function (o) {
-        return o.element === el;
-      });
-      switch (property) {
-        case 'transform.translateX':
-          elTransform.transform.translateX = (0, _utils.px)(val);
-          break;
-        case 'transform.translateY':
-          elTransform.transform.translateY = (0, _utils.px)(val);
-          break;
-        case 'transform.translateZ':
-          elTransform.transform.translateZ = (0, _utils.px)(val);
-          break;
-        case 'transform.rotateX':
-          elTransform.transform.rotateX = val;
-          break;
-        case 'transform.rotateY':
-          elTransform.transform.rotateY = val;
-          break;
-        case 'transform.rotateZ':
-          elTransform.transform.rotateZ = val;
-          break;
-        case 'transform.rotate':
-          elTransform.transform.rotateZ = val;
-          break;
-        case 'transform.scaleX':
-          elTransform.transform.scaleX = val;
-          break;
-        case 'transform.scaleY':
-          elTransform.transform.scaleY = val;
-          break;
-        case 'transform.scale':
-          elTransform.transform.scaleX = val;
-          elTransform.transform.scaleY = val;
-          break;
-        case 'width':
-          el.style.width = (0, _utils.px)(val) + 'px';
-          break;
-        case 'height':
-          el.style.height = (0, _utils.px)(val) + 'px';
-          break;
-        case 'opacity':
-          el.style.opacity = val;
-          break;
-        case 'background-color':
-          el.style['background-color'] = val;
-          break;
-        case 'color':
-          el.style.color = val;
-          break;
-        case 'border-top-left-radius':
-        case 'border-top-right-radius':
-        case 'border-bottom-left-radius':
-        case 'border-bottom-right-radius':
-        case 'border-radius':
-        case 'margin-top':
-        case 'margin-bottom':
-        case 'margin-left':
-        case 'margin-right':
-          el.style[property] = (0, _utils.px)(val) + 'px';
-          break;
+
+      if (el instanceof HTMLElement) {
+        var elTransform = _simpleLodash2.default.find(this.elTransforms, function (o) {
+          return o.element === el;
+        });
+        switch (property) {
+          case 'transform.translateX':
+            elTransform.transform.translateX = (0, _utils.px)(val);
+            break;
+          case 'transform.translateY':
+            elTransform.transform.translateY = (0, _utils.px)(val);
+            break;
+          case 'transform.translateZ':
+            elTransform.transform.translateZ = (0, _utils.px)(val);
+            break;
+          case 'transform.rotateX':
+            elTransform.transform.rotateX = val;
+            break;
+          case 'transform.rotateY':
+            elTransform.transform.rotateY = val;
+            break;
+          case 'transform.rotateZ':
+            elTransform.transform.rotateZ = val;
+            break;
+          case 'transform.rotate':
+            elTransform.transform.rotateZ = val;
+            break;
+          case 'transform.scaleX':
+            elTransform.transform.scaleX = val;
+            break;
+          case 'transform.scaleY':
+            elTransform.transform.scaleY = val;
+            break;
+          case 'transform.scale':
+            elTransform.transform.scaleX = val;
+            elTransform.transform.scaleY = val;
+            break;
+          case 'opacity':
+            el.style.opacity = val;
+            break;
+          case 'background-color':
+            el.style['background-color'] = val;
+            break;
+          case 'color':
+            el.style.color = val;
+            break;
+          case 'width':
+          case 'height':
+          case 'border-top-left-radius':
+          case 'border-top-right-radius':
+          case 'border-bottom-left-radius':
+          case 'border-bottom-right-radius':
+          case 'border-radius':
+          case 'margin-top':
+          case 'margin-bottom':
+          case 'margin-left':
+          case 'margin-right':
+          case 'padding-top':
+          case 'padding-bottom':
+          case 'padding-left':
+          case 'padding-right':
+            el.style[property] = (0, _utils.px)(val) + 'px';
+            break;
+        }
+        el.style[vendorTransform] = ['translateX(' + elTransform.transform.translateX + 'px)', 'translateY(' + elTransform.transform.translateY + 'px)', 'translateZ(' + elTransform.transform.translateZ + 'px)', 'scaleX(' + elTransform.transform.scaleX + ')', 'scaleY(' + elTransform.transform.scaleY + ')', 'rotateX(' + elTransform.transform.rotateX + 'deg)', 'rotateY(' + elTransform.transform.rotateY + 'deg)', 'rotateZ(' + elTransform.transform.rotateZ + 'deg)'].join(' ');
+      } else if (el instanceof SVGElement) {
+        var _elTransform = _simpleLodash2.default.find(this.elTransforms, function (o) {
+          return o.element === el;
+        });
+        switch (property) {
+          case 'svg-dashoffset':
+            el.setAttribute('stroke-dashoffset', (0, _utils.px)(val));
+            break;
+          case 'svg-transform.translateX':
+            _elTransform.transform.translateX = (0, _utils.px)(val);
+            break;
+          case 'svg-transform.translateY':
+            _elTransform.transform.translateY = (0, _utils.px)(val);
+            break;
+          case 'svg-transform.translateZ':
+            _elTransform.transform.translateZ = (0, _utils.px)(val);
+            break;
+          case 'svg-transform.rotateX':
+            _elTransform.transform.rotateX = val;
+            break;
+          case 'svg-transform.rotateY':
+            _elTransform.transform.rotateY = val;
+            break;
+          case 'svg-transform.rotateZ':
+            _elTransform.transform.rotateZ = val;
+            break;
+          case 'svg-transform.rotate':
+            _elTransform.transform.rotateZ = val;
+            break;
+          case 'svg-transform.scaleX':
+            _elTransform.transform.scaleX = val;
+            break;
+          case 'svg-transform.scaleY':
+            _elTransform.transform.scaleY = val;
+            break;
+          case 'svg-transform.scale':
+            _elTransform.transform.scaleX = val;
+            _elTransform.transform.scaleY = val;
+            break;
+        }
+
+        el.style[vendorTransform] = ['translateX(' + _elTransform.transform.translateX + 'px)', 'translateY(' + _elTransform.transform.translateY + 'px)', 'translateZ(' + _elTransform.transform.translateZ + 'px)', 'scaleX(' + _elTransform.transform.scaleX + ')', 'scaleY(' + _elTransform.transform.scaleY + ')', 'rotateX(' + _elTransform.transform.rotateX + 'deg)', 'rotateY(' + _elTransform.transform.rotateY + 'deg)', 'rotateZ(' + _elTransform.transform.rotateZ + 'deg)'].join(' ');
+      } else {
+
+        switch (property) {
+          case 'lottie-progress':
+            // for lottie
+            if (typeof el.setProgress == 'function') {
+              el.setProgress(val);
+            }
+            break;
+        }
       }
-      el.style[vendorTransform] = ['translateX(' + elTransform.transform.translateX + 'px)', 'translateY(' + elTransform.transform.translateY + 'px)', 'translateZ(' + elTransform.transform.translateZ + 'px)', 'scaleX(' + elTransform.transform.scaleX + ')', 'scaleY(' + elTransform.transform.scaleY + ')', 'rotateX(' + elTransform.transform.rotateX + 'deg)', 'rotateY(' + elTransform.transform.rotateY + 'deg)', 'rotateZ(' + elTransform.transform.rotateZ + 'deg)'].join(' ');
     }
   }, {
     key: 'destroy',
@@ -2913,22 +3045,35 @@ module.exports = {
     });
   },
   getComputedStyle: function getComputedStyle(elRef) {
-    var computedStyle = window.getComputedStyle(elRef);
-    var style = (0, _utils.matrixToTransformObj)(computedStyle[vendorTransform]);
-    style.opacity = Number(computedStyle.opacity);
-    style['background-color'] = computedStyle['background-color'];
-    style.color = computedStyle.color;
-    style.width = (0, _utils.pxTo750)(computedStyle.width.replace('px', ''));
-    style.height = (0, _utils.pxTo750)(computedStyle.height.replace('px', ''));
-    style['border-top-left-radius'] = (0, _utils.pxTo750)(computedStyle['border-top-left-radius'].replace('px', ''));
-    style['border-top-right-radius'] = (0, _utils.pxTo750)(computedStyle['border-top-right-radius'].replace('px', ''));
-    style['border-bottom-left-radius'] = (0, _utils.pxTo750)(computedStyle['border-bottom-left-radius'].replace('px', ''));
-    style['border-bottom-right-radius'] = (0, _utils.pxTo750)(computedStyle['border-bottom-right-radius'].replace('px', ''));
-    style['margin-top'] = (0, _utils.pxTo750)(computedStyle['margin-top'].replace('px', ''));
-    style['margin-bottom'] = (0, _utils.pxTo750)(computedStyle['margin-bottom'].replace('px', ''));
-    style['margin-left'] = (0, _utils.pxTo750)(computedStyle['margin-left'].replace('px', ''));
-    style['margin-right'] = (0, _utils.pxTo750)(computedStyle['margin-right'].replace('px', ''));
-    return style;
+    if (elRef instanceof HTMLElement) {
+      var computedStyle = window.getComputedStyle(elRef);
+      var style = (0, _utils.matrixToTransformObj)(computedStyle[vendorTransform]);
+      style.opacity = Number(computedStyle.opacity);
+      style['background-color'] = computedStyle['background-color'];
+      style.color = computedStyle.color;
+      style.width = (0, _utils.pxTo750)(computedStyle.width.replace('px', ''));
+      style.height = (0, _utils.pxTo750)(computedStyle.height.replace('px', ''));
+      style['border-top-left-radius'] = (0, _utils.pxTo750)(computedStyle['border-top-left-radius'].replace('px', ''));
+      style['border-top-right-radius'] = (0, _utils.pxTo750)(computedStyle['border-top-right-radius'].replace('px', ''));
+      style['border-bottom-left-radius'] = (0, _utils.pxTo750)(computedStyle['border-bottom-left-radius'].replace('px', ''));
+      style['border-bottom-right-radius'] = (0, _utils.pxTo750)(computedStyle['border-bottom-right-radius'].replace('px', ''));
+      style['margin-top'] = (0, _utils.pxTo750)(computedStyle['margin-top'].replace('px', ''));
+      style['margin-bottom'] = (0, _utils.pxTo750)(computedStyle['margin-bottom'].replace('px', ''));
+      style['margin-left'] = (0, _utils.pxTo750)(computedStyle['margin-left'].replace('px', ''));
+      style['margin-right'] = (0, _utils.pxTo750)(computedStyle['margin-right'].replace('px', ''));
+      style['padding-top'] = (0, _utils.pxTo750)(computedStyle['padding-top'].replace('px', ''));
+      style['padding-bottom'] = (0, _utils.pxTo750)(computedStyle['padding-bottom'].replace('px', ''));
+      style['padding-left'] = (0, _utils.pxTo750)(computedStyle['padding-left'].replace('px', ''));
+      style['padding-right'] = (0, _utils.pxTo750)(computedStyle['padding-right'].replace('px', ''));
+      return style;
+    } else {
+      // TODO lottie support
+      // if(typeof elRef.setProgress == 'function') {
+      //   return {
+      // 'lottie-progress':
+      // }
+      // }
+    }
   }
 };
 

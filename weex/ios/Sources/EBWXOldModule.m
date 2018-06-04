@@ -21,6 +21,7 @@
 #import <WeexPluginLoader/WeexPluginLoader.h>
 #import "EBBindData.h"
 #import "EBUtility+WX.h"
+#import "EBWXUtils.h"
 
 // WX_PlUGIN_EXPORT_MODULE(expressionBinding, EBWXOldModule)
 
@@ -37,10 +38,10 @@
 
 @synthesize weexInstance;
 
-WX_EXPORT_METHOD(@selector(enableBinding:eventType:))
-WX_EXPORT_METHOD(@selector(createBinding:eventType:exitExpression:targetExpression:callback:))
-WX_EXPORT_METHOD(@selector(disableBinding:eventType:))
-WX_EXPORT_METHOD(@selector(disableAll))
+WX_EXPORT_METHOD_SYNC(@selector(enableBinding:eventType:))
+WX_EXPORT_METHOD_SYNC(@selector(createBinding:eventType:exitExpression:targetExpression:callback:))
+WX_EXPORT_METHOD_SYNC(@selector(disableBinding:eventType:))
+WX_EXPORT_METHOD_SYNC(@selector(disableAll))
 WX_EXPORT_METHOD_SYNC(@selector(supportFeatures))
 WX_EXPORT_METHOD_SYNC(@selector(getComputedStyle:))
 
@@ -71,13 +72,13 @@ WX_EXPORT_METHOD_SYNC(@selector(getComputedStyle:))
         WX_LOG(WXLogFlagWarning, @"enableBinding params error");
         return;
     }
-
+    
     WXExpressionType exprType = [EBExpressionHandler stringToExprType:eventType];
     if (exprType == WXExpressionTypeUndefined) {
         WX_LOG(WXLogFlagWarning, @"enableBinding params error");
         return;
     }
-
+    
     __weak typeof(self) welf = self;
     WXPerformBlockOnComponentThread(^{
         // find sourceRef & targetRef
@@ -86,16 +87,16 @@ WX_EXPORT_METHOD_SYNC(@selector(getComputedStyle:))
             WX_LOG(WXLogFlagWarning, @"enableBinding can't find component");
             return;
         }
-
+        
         pthread_mutex_lock(&mutex);
-
+        
         EBExpressionHandler *handler = [welf.bindData handlerForToken:sourceRef expressionType:exprType];
         if (!handler) {
             // create handler for key
             handler = [EBExpressionHandler handlerWithExpressionType:exprType source:sourceComponent];
             [welf.bindData putHandler:handler forToken:sourceRef expressionType:exprType];
         }
-
+        
         pthread_mutex_unlock(&mutex);
     });
 }
@@ -110,14 +111,14 @@ WX_EXPORT_METHOD_SYNC(@selector(getComputedStyle:))
         callback(@{@"state":@"error",@"msg":@"createBinding params error"}, NO);
         return;
     }
-
+    
     WXExpressionType exprType = [EBExpressionHandler stringToExprType:eventType];
     if (exprType == WXExpressionTypeUndefined) {
         WX_LOG(WXLogFlagWarning, @"createBinding params handler error");
         callback(@{@"state":@"error",@"msg":@"createBinding params handler error"}, NO);
         return;
     }
-
+    
     __weak typeof(self) welf = self;
     WXPerformBlockOnComponentThread(^{
         // find sourceRef & targetRef
@@ -127,55 +128,58 @@ WX_EXPORT_METHOD_SYNC(@selector(getComputedStyle:))
             callback(@{@"state":@"error",@"msg":@"createBinding can't find source component"}, NO);
             return;
         }
-
-        NSMapTable<id, NSDictionary *> *targetExpressionMap = [NSMapTable new];
+        
+        NSMapTable<NSString *, id> *targetMap = [NSMapTable strongToWeakObjectsMapTable];
+        NSMutableDictionary<NSString *, NSDictionary *> *expressionDict = [NSMutableDictionary dictionary];
         for (NSDictionary *targetDic in targetExpression) {
             NSString *targetRef = targetDic[@"element"];
             NSString *property = targetDic[@"property"];
             NSString *expression = targetDic[@"expression"];
-
+            
             WXComponent *targetComponent = [weexInstance componentForRef:targetRef];
             if (targetComponent) {
-
+                
                 if ([targetComponent isViewLoaded]) {
                     WXPerformBlockOnMainThread(^{
                         [targetComponent.view.layer removeAllAnimations];
                     });
                 }
-
-                NSMutableDictionary *propertyDic = [[targetExpressionMap objectForKey:targetComponent] mutableCopy];
+                
+                NSMutableDictionary *propertyDic = [[expressionDict objectForKey:targetRef] mutableCopy];
                 if (!propertyDic) {
                     propertyDic = [NSMutableDictionary dictionary];
                 }
                 NSMutableDictionary *expDict = [NSMutableDictionary dictionary];
                 expDict[@"expression"] = [EBBindData parseExpression:expression];
-
+                
                 if( targetDic[@"config"] )
                 {
                     expDict[@"config"] = targetDic[@"config"];
                 }
                 propertyDic[property] = expDict;
-                [targetExpressionMap setObject:propertyDic forKey:targetComponent];
+                [targetMap setObject:targetComponent forKey:targetRef];
+                [expressionDict setObject:propertyDic forKey:targetRef];
             }
         }
-
+        
         // find handler for key
         pthread_mutex_lock(&mutex);
-
+        
         EBExpressionHandler *handler = [welf.bindData handlerForToken:sourceRef expressionType:exprType];
         if (!handler) {
             // create handler for key
             handler = [EBExpressionHandler handlerWithExpressionType:exprType source:sourceComponent];
             [welf.bindData putHandler:handler forToken:sourceRef expressionType:exprType];
         }
-
-        [handler updateTargetExpression:targetExpressionMap
-                                options:nil
-                         exitExpression:[EBBindData parseExpression:exitExpression]
-                               callback:^(id  _Nonnull source, id  _Nonnull result, BOOL keepAlive) {
-                                   callback(result,keepAlive);
-                               }];
-
+        
+        [handler updateTargetMap:targetMap
+                  expressionDict:expressionDict
+                         options:nil
+                  exitExpression:[EBBindData parseExpression:exitExpression]
+                        callback:^(id  _Nonnull source, id  _Nonnull result, BOOL keepAlive) {
+                            callback(result,keepAlive);
+                        }];
+        
         pthread_mutex_unlock(&mutex);
     });
 }
@@ -221,8 +225,8 @@ WX_EXPORT_METHOD_SYNC(@selector(getComputedStyle:))
 }
 
 - (NSDictionary *)getComputedStyle:(NSString *)sourceRef {
-    if ([WXUtility isBlankString:sourceRef]) {
-        WX_LOG(WXLogFlagWarning, @"createBinding params error");
+    if (![sourceRef isKindOfClass:NSString.class] || [WXUtility isBlankString:sourceRef]) {
+        WX_LOG(WXLogFlagWarning, @"getComputedStyle params error");
         return nil;
     }
     
@@ -233,10 +237,33 @@ WX_EXPORT_METHOD_SYNC(@selector(getComputedStyle:))
         // find sourceRef & targetRef
         WXComponent *sourceComponent = [weexInstance componentForRef:sourceRef];
         if (!sourceComponent) {
-            WX_LOG(WXLogFlagWarning, @"createBinding can't find source component");
+            WX_LOG(WXLogFlagWarning, @"getComputedStyle can't find source component");
             return;
         }
-        WXPerformBlockSyncOnMainThread(^{
+        NSDictionary* mapping = [EBWXUtils cssPropertyMapping];
+        for (NSString* key in mapping) {
+            id value = sourceComponent.styles[key];
+            if (value) {
+                if ([value isKindOfClass:NSString.class]) {
+                    NSString *string = (NSString *)value;
+                    if ([string hasSuffix:@"px"]) {
+                        NSString *number = [string substringToIndex:(string.length-2)];
+                        [styles setValue:@([number floatValue]) forKey:mapping[key]];
+                    } else {
+                        [styles setValue:string forKey:mapping[key]];
+                    }
+                } else if([value isKindOfClass:NSNumber.class]) {
+                    [styles setValue:value forKey:mapping[key]];
+                }
+            }
+        }
+        if (sourceComponent.styles[@"borderRadius"]) {
+            [styles setValue:sourceComponent.styles[@"borderRadius"] forKey:@"border-top-left-radius"];
+            [styles setValue:sourceComponent.styles[@"borderRadius"] forKey:@"border-top-right-radius"];
+            [styles setValue:sourceComponent.styles[@"borderRadius"] forKey:@"border-bottom-left-radius"];
+            [styles setValue:sourceComponent.styles[@"borderRadius"] forKey:@"border-bottom-right-radius"];
+        }
+        WXPerformBlockOnMainThread(^{
             CALayer *layer = sourceComponent.view.layer;
             styles[@"translateX"] = [EBUtility transformFactor:@"transform.translation.x" layer:layer];
             styles[@"translateY"] = [EBUtility transformFactor:@"transform.translation.y" layer:layer];
@@ -247,20 +274,11 @@ WX_EXPORT_METHOD_SYNC(@selector(getComputedStyle:))
             styles[@"rotateZ"] = [layer valueForKeyPath:@"transform.rotation.z"];
             styles[@"opacity"] = [layer valueForKeyPath:@"opacity"];
             
-            styles[@"background-color"] = [EBUtility colorAsString:layer.backgroundColor];;
-            if ([sourceComponent isKindOfClass:NSClassFromString(@"WXTextComponent")]) {
-                Ivar ivar = class_getInstanceVariable(NSClassFromString(@"WXTextComponent"), "_color");
-                UIColor *color = (UIColor *)object_getIvar(sourceComponent, ivar);
-                if (color) {
-                    styles[@"color"] = [EBUtility colorAsString:color.CGColor];
-                }
-            }
-            
             dispatch_semaphore_signal(semaphore);
         });
     });
     
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)));
     return styles;
 }
 
