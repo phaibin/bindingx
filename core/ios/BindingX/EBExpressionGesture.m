@@ -182,19 +182,19 @@
                 && scroller.contentSize.width <= scroller.frame.size.height) {
                 return YES;
             }
-        } else if (otherGestureRecognizer.delegate && [otherGestureRecognizer.delegate isKindOfClass:[EBExpressionGesture class]]) {
-            if ([self isInnerPan:(UIPanGestureRecognizer *)otherGestureRecognizer otherPan:(UIPanGestureRecognizer *)gestureRecognizer]) {
-                EBExpressionGesture *exprGesture = (EBExpressionGesture *)(otherGestureRecognizer.delegate);
+        // } else if (otherGestureRecognizer.delegate && [otherGestureRecognizer.delegate isKindOfClass:[EBExpressionGesture class]]) {
+        //     if ([self isInnerPan:(UIPanGestureRecognizer *)otherGestureRecognizer otherPan:(UIPanGestureRecognizer *)gestureRecognizer]) {
+        //         EBExpressionGesture *exprGesture = (EBExpressionGesture *)(otherGestureRecognizer.delegate);
                 
-                // direction
-                if (_isHorizontal && exprGesture.isHorizontal) {
-                    return YES;
-                }
+        //         // direction
+        //         if (_isHorizontal && exprGesture.isHorizontal) {
+        //             return YES;
+        //         }
                 
-                if (_isVertical && exprGesture.isVertical) {
-                    return YES;
-                }
-            }
+        //         if (_isVertical && exprGesture.isVertical) {
+        //             return YES;
+        //         }
+        //     }
         } else if(self.exprType == WXExpressionTypePan && [otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
             if ([self isInnerPan:(UIPanGestureRecognizer *)otherGestureRecognizer otherPan:(UIPanGestureRecognizer *)gestureRecognizer]) {
                 return YES;
@@ -210,13 +210,14 @@
             if (_isMutex) {
                 return YES;
             }
-        } else if (otherGestureRecognizer.delegate && [otherGestureRecognizer.delegate isKindOfClass:[EBExpressionGesture class]]) {
-            if ([self isInnerPan:(UIPanGestureRecognizer *)gestureRecognizer otherPan:(UIPanGestureRecognizer *)otherGestureRecognizer]) {
-                if (_isMutex) {
-                    return YES;
-                }
-            }
-        }
+        } 
+        // else if (otherGestureRecognizer.delegate && [otherGestureRecognizer.delegate isKindOfClass:[EBExpressionGesture class]]) {
+        //     if ([self isInnerPan:(UIPanGestureRecognizer *)gestureRecognizer otherPan:(UIPanGestureRecognizer *)otherGestureRecognizer]) {
+        //         if (_isMutex) {
+        //             return YES;
+        //         }
+        //     }
+        // }
     }
     return NO;
 }
